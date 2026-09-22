@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronogramas – Plano do Núcleo Cível</title>
+<style>
+  :root{
+    --preto:         #111111;
+    --carvao:        #1A1A1A;
+    --grafite:       #232323;
+    --cinza-escuro:  #2E2E2E;
+    --cinza-medio:   #B8B8B8;
+    --cinza-claro:   #E8E8E8;
+    --branco:        #FFFFFF;
+    --dourado:       #C89B3C;
+    --dourado-claro: #E0B85A;
+    --fundo-claro:   #F7F7F7;
+    --fundo-card:    #FFFFFF;
+    --texto-escuro:  #1A1A1A;
+  }
+
+  *{ box-sizing: border-box; }
+  html, body{ margin:0; padding:0; }
+
+  body{
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--fundo-claro);
+    color: var(--texto-escuro);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+
+  /* ---------- HERO / CAPA ---------- */
+  header.hero{
+    background: linear-gradient(135deg, var(--carvao) 0%, var(--preto) 100%);
+    color: var(--branco);
+    padding: 50px 30px 40px;
+    text-align: center;
+    border-bottom: 3px solid var(--dourado);
+  }
+  header.hero h1{
+    margin: 0 0 10px;
+    font-size: 30px;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    color: var(--branco);
+  }
+  header.hero h2{
+    margin: 0;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--cinza-medio);
+    letter-spacing: .8px;
+  }
+  header.hero .meta{
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--cinza-medio);
+    padding-top: 18px;
+    border-top: 1px solid var(--cinza-escuro);
+    display: inline-block;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  header.hero .meta strong{ color: var(--dourado-claro); font-weight: 500; }
+
+  /* ---------- CONTAINER ---------- */
+  main{
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+  }
+
+  /* ---------- SEÇÕES ---------- */
+  section{
+    background: var(--fundo-card);
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    padding: 30px 28px;
+    margin-bottom: 34px;
+    border-top: 3px solid var(--dourado);
+    page-break-inside: avoid;
+  }
+  section h3{
+    margin: 0 0 8px;
+    color: var(--preto);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: .3px;
+  }
+  section .subtitulo{
+    margin: 0 0 22px;
+    font-size: 13px;
+    color: #777;
+    letter-spacing: .3px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--cinza-claro);
+  }
+
+  /* ---------- TABELAS ---------- */
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  thead th{
+    background: var(--preto);
+    color: var(--branco);
+    text-align: left;
+    padding: 13px 12px;
+    font-weight: 600;
+    font-size: 13.5px;
+    letter-spacing: .4px;
+    border-bottom: 2px solid var(--dourado);
+  }
+  tbody td{
+    padding: 11px 12px;
+    border-bottom: 1px solid #ECECEC;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even){ background: #FAFAFA; }
+  tbody tr:hover{ background: #F2F2F2; }
+
+  .data-fixa{
+    color: var(--preto);
+    font-weight: 600;
+    border-left: 3px solid var(--dourado);
+    padding-left: 8px;
+  }
+
+  /* ---------- TAGS DE STATUS ---------- */
+  .tag{
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 2px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .tag-concluido{ background: #2E2E2E; color: #E8E8E8; }
+  .tag-andamento{ background: var(--dourado); color: var(--preto); }
+  .tag-futuro{ background: #E8E8E8; color: var(--preto); }
+  .tag-continuo{ background: #F5EBD0; color: #6B5A1E; }
+
+  /* ---------- CALENDÁRIO ---------- */
+  .grid-meses{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+  }
+  .card-mes{
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--fundo-card);
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .2s ease;
+  }
+  .card-mes:hover{ box-shadow: 0 4px 16px rgba(0,0,0,.10); }
+
+  .card-mes .cabecalho-mes{
+    background: var(--preto);
+    color: var(--branco);
+    padding: 14px 18px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--dourado);
+  }
+  .card-mes .cabecalho-mes .ano{
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--dourado-claro);
+    letter-spacing: .5px;
+  }
+  .card-mes ul{
+    list-style: none;
+    margin: 0;
+    padding: 8px 18px 16px;
+    flex: 1;
+  }
+  .card-mes li{
+    padding: 10px 0;
+    border-bottom: 1px dashed #E5E5E5;
+    font-size: 13.5px;
+  }
+  .card-mes li:last-child{ border-bottom: none; }
+  .card-mes li .item{
+    display: block;
+    font-size: 11px;
+    color: #999;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .card-mes li .prazo{
+    display: inline-block;
+    margin-top: 5px;
+    font-weight: 600;
+    color: var(--preto);
+    font-size: 12.5px;
+    border-left: 2px solid var(--dourado);
+    padding-left: 7px;
+  }
+
+  .card-mes.destaque{ border-color: var(--dourado); }
+  .card-mes.destaque .cabecalho-mes{
+    background: var(--dourado);
+    color: var(--preto);
+    border-bottom-color: var(--preto);
+  }
+  .card-mes.destaque .cabecalho-mes .ano{ color: #5A4A0E; }
+  .card-mes.destaque li .prazo{ border-left-color: var(--preto); }
+
+  /* ---------- LEGENDA ---------- */
+  .legenda{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 14px;
+    font-size: 12.5px;
+    color: #666;
+  }
+  .legenda span{ display: inline-flex; align-items: center; gap: 6px; }
+  .bolinha{
+    width: 12px; height: 12px; border-radius: 50%;
+    display: inline-block;
+    border: 1px solid rgba(0,0,0,.1);
+  }
+
+  /* ---------- VISÃO SINTÉTICA ---------- */
+  .sintese td:first-child{
+    font-weight: 600;
+    color: var(--preto);
+    white-space: nowrap;
+    border-left: 3px solid var(--dourado);
+    padding-left: 10px;
+  }
+
+  /* ---------- RODAPÉ ---------- */
+  footer.rodape{
+    text-align: center;
+    font-size: 12.5px;
+    color: #999;
+    padding: 24px 10px 40px;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 10px;
+    background: var(--fundo-claro);
+  }
+  footer.rodape strong{ color: var(--preto); }
+  footer.rodape .dourado{ color: var(--dourado); }
+
+  /* ---------- RESPONSIVO ---------- */
+  @media (max-width: 640px){
+    header.hero{ padding: 30px 18px 25px; }
+    header.hero h1{ font-size: 20px; }
+    section{ padding: 20px 16px; }
+    thead th, tbody td{ padding: 9px 8px; font-size: 13px; }
+    table{ font-size: 13px; }
+  }
+
+  /* ---------- IMPRESSÃO ---------- */
+  @page{
+    size: A4;
+    margin: 22mm 14mm 18mm 14mm;
+    @top-left{
+      content: "PLANO DO NÚCLEO CÍVEL";
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 9pt;
+      color: #111;
+      letter-spacing: .5px;
+      font-weight: 600;
+    }
+    @top-right{
+      content: "Cronograma";
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 9pt;
+      color: #777;
+    }
+    @bottom-left{
+      content: "Documento de uso interno • Elaborado por Ronaldo Muniz Machado Júnior";
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #999;
+    }
+    @bottom-right{
+      content: "Página " counter(page) " de " counter(pages);
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #111;
+      font-weight: 600;
+    }
+  }
+  @media print{
+    body{ background: #fff; }
+    header.hero{
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      page-break-after: always;
+    }
+    section{
+      box-shadow: none;
+      border: 1px solid #DDD;
+      page-break-inside: avoid;
+    }
+    .card-mes{ page-break-inside: avoid; }
+    thead th, .card-mes .cabecalho-mes, .tag{
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA / HERO ============ -->
+<header class="hero">
+  <h1>PLANO DO NÚCLEO CÍVEL</h1>
+  <h2>Cronograma</h2>
+  <div class="meta">
+    <strong>Responsável:</strong> Ronaldo Muniz Machado Júnior &nbsp;|&nbsp;
+    <strong>Data-base:</strong> 21/09/2026
+  </div>
+</header>
+
+<main>
+
+  <!-- ============ CALENDÁRIO ============ -->
+  <section>
+    <h3>Distribuição mensal dos marcos de setembro a dezembro/2026 e eventos recorrentes*</h3>
+    <p class="subtitulo">*As datas indicadas podem sofrer alteração conforme o fluxo de demandas do núcleo</p>
+
+    <div class="grid-meses">
+
+      <div class="card-mes">
+        <div class="cabecalho-mes">Setembro <span class="ano">2026</span></div>
+        <ul>
+          <li><span class="item">2.1 – Diagnóstico e Mapeamento</span>Levantamento completo dos processos ativos prioritários<span class="prazo">Concluído</span></li>
+          <li><span class="item">2.3 – Cronograma</span>Diagnóstico: mapeamento e classificação<span class="prazo">Em andamento</span></li>
+        </ul>
+      </div>
+
+      <div class="card-mes">
+        <div class="cabecalho-mes">Outubro <span class="ano">2026</span></div>
+        <ul>
+          <li><span class="item">2.1 – Diagnóstico e Mapeamento</span>Relatório executivo por processo<span class="prazo">Até 02/10</span></li>
+          <li><span class="item">2.2 – Estratégias de Impulsionamento</span>Revisão de teses e estratégias – 100% dos prioritários<span class="prazo">Até 02/10</span></li>
+          <li><span class="item">3.1 – Identificação e Classificação</span>Levantamento dos processos em fase final<span class="prazo">Até 07/10</span></li>
+          <li><span class="item">3.1 – Identificação e Classificação</span>Verificação de pendências documentais<span class="prazo">Até 14/10</span></li>
+          <li><span class="item">2.2 – Estratégias de Impulsionamento</span>Lista de processos elencáveis a acordo<span class="prazo">Até 15/10</span></li>
+          <li><span class="item">2.3 – Cronograma</span>Implantação: medidas prioritárias e reuniões semanais<span class="prazo">Outubro/2026</span></li>
+          <li><span class="item">2.2 – Estratégias de Impulsionamento</span>Medidas executivas e cautelares nos prioritários<span class="prazo">Até o final do mês</span></li>
+        </ul>
+      </div>
+
+      <div class="card-mes">
+        <div class="cabecalho-mes">Novembro <span class="ano">2026</span></div>
+        <ul>
+          <li><span class="item">2.3 – Cronograma</span>Revisão Estratégica: resultados parciais e ajustes<span class="prazo">Novembro/2026</span></li>
+          <li><span class="item">2.3 – Cronograma</span>A partir desta data, a Revisão ocorre a cada 3 meses<span class="prazo">Recorrente</span></li>
+        </ul>
+      </div>
+
+      <div class="card-mes">
+        <div class="cabecalho-mes">Dezembro <span class="ano">2026</span></div>
+        <ul>
+          <li><span class="item">2.3 – Cronograma</span>Acompanhamento: ciclos contínuos de revisão<span class="prazo">Dezembro em diante</span></li>
+          <li><span class="item">2.3 – Cronograma</span>Relatórios mensais à Diretoria<span class="prazo">Mensal</span></li>
+        </ul>
+      </div>
+
+      <div class="card-mes destaque">
+        <div class="cabecalho-mes">Contínuo &amp; Recorrente <span class="ano">KPIs</span></div>
+        <ul>
+          <li><span class="item">6 – KPIs</span>Impulso dos processos prioritários<span class="prazo">Semanal</span></li>
+          <li><span class="item">6 – KPIs</span>Cumprimento de Prazos (meta 100%)<span class="prazo">Mensal</span></li>
+          <li><span class="item">6 – KPIs</span>Taxa de encerramento<span class="prazo">Mensal</span></li>
+          <li><span class="item">6 – KPIs</span>Valor recuperado<span class="prazo">Mensal</span></li>
+          <li><span class="item">6 – KPIs</span>Relatório gerencial e reportes<span class="prazo">Mensal</span></li>
+          <li><span class="item">6 – KPIs</span>Evolução da equipe – avaliação semestral<span class="prazo">Semestral</span></li>
+          <li><span class="item">6 – KPIs</span>Satisfação do cliente (meta ≥ 70%)<span class="prazo">Semestral</span></li>
+          <li><span class="item">6 – KPIs</span>Expansão de carteira<span class="prazo">Contínuo</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ VISÃO SINTÉTICA ============ -->
+  <section>
+    <h3>Visão Sintética do Calendário</h3>
+    <p class="subtitulo">Principais entregas por mês.</p>
+
+    <table class="sintese">
+      <thead>
+        <tr><th style="width:22%">Mês</th><th>Principais Entregas</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Setembro/2026</td><td>Conclusão do levantamento dos processos prioritários; início do diagnóstico.</td></tr>
+        <tr><td>Outubro/2026</td><td>Relatórios executivos (02/10); revisão de teses (02/10); levantamento de processos em fase final (07/10); verificação de pendências (14/10); lista de acordos (15/10); implantação das medidas prioritárias; medidas executivas e cautelares até o fim do mês.</td></tr>
+        <tr><td>Novembro/2026</td><td>Primeira Revisão Estratégica (e, após, a cada 3 meses).</td></tr>
+        <tr><td>Dezembro/2026</td><td>Início do ciclo de Acompanhamento contínuo com relatórios mensais à Diretoria.</td></tr>
+        <tr><td>Contínuo</td><td>KPIs semanais, mensais, semestrais e de expansão de carteira.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <strong>PLANO DO NÚCLEO CÍVEL</strong> <span class="dourado">|</span> Documento de uso interno<br>
+  Elaborado por Ronaldo Muniz Machado Júnior &nbsp;<span class="dourado">•</span>&nbsp; Data-base: 21/09/2026
+</footer>
+
+</body>
+</html>
